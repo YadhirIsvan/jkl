@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -74,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'edusmart.wsgi.application'
 
-
+AUTH_USER_MODEL = 'user_app.Account'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -126,3 +126,50 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated'
+#     ]
+    
+# }
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication'
+    # ]
+   'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.TokenAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+
+    ],
+
+    #se comenta esta seccion de abajo para que funcionen los throttle scope
+    #  'DEFAULT_THROTTLE_CLASSES':[
+    #      'rest_framework.throttling.AnonRateThrottle', 
+    #      'rest_framework.throttling.UserRateThrottle',
+    #  ],
+    'DEFAULT_THROTTLE_RATES':{
+        'anon': '100/day',
+        'user': '100/day',
+        'comentario-create' : '200/day',
+        'comentario-list': '800/day',
+        'comentario-detail': '300/day',
+    },
+
+    'DEFAULT_RENDERER_CLASSES' : (
+        'rest_framework.renderers.JSONRenderer',
+    )
+
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE' : 2
+
+}
+
+
+SIMPLE_JWT={
+    'ROTATE_REFRESH_TOKENS':True,
+    'ACCESS_TOKEN_LIFETIME' : timedelta(days=365),
+    'REFRESH_TOKEN_LIFETIME' : timedelta(days=365)
+}

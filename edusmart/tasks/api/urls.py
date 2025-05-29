@@ -1,5 +1,5 @@
 from django.urls import path
-from schools.api.views import AdminTareaListCreateView, AdminTareaDetailView
+from tasks.api.views import AdminTareaListCreateView, AdminTareaDetailView
 
 urlpatterns = [
     path('<str:usuarioEscuela>/cursos/<str:nombreCurso>/tareas/', AdminTareaListCreateView.as_view()),
