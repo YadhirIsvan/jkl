@@ -24,10 +24,8 @@ urlpatterns = [
 
     # Escuelas
     path('administrador/', include('schools.api.urls')),
-
     # Grupos
     path('administrador/', include('groups.api.urls')),
-
     # Cursos
     path('administrador/', include('courses.api.urls')),
     path('profesor/', include('courses.api.urls')),
@@ -42,4 +40,7 @@ urlpatterns = [
     path('administrador/', include('tasks.api.urls')),
     path('profesor/', include('tasks.api.urls')),
     path('estudiante/', include('tasks.api.urls')),
+
+    # otras rutas
+    path('', include('schools.api.urls')),  # o como lo tengas
 ]

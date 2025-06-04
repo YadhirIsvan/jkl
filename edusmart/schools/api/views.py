@@ -15,6 +15,39 @@ from courses.api.serializers import CursoSerializer
 from groups.models import Grupo
 from groups.api.serializers import GrupoSerializer
 
+
+
+class EscuelasDelProfesorView(generics.ListAPIView):
+    serializer_class = EscuelaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        usuario = self.request.user
+        return Escuela.objects.filter(
+            usuarioescuela__usuario=usuario,
+            usuarioescuela__rol='profesor'
+        ).distinct()
+    
+
+class EscuelasDelEstudianteView(generics.ListAPIView):
+    serializer_class = EscuelaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        usuario = self.request.user
+        return Escuela.objects.filter(
+            usuarioescuela__usuario=usuario,
+            usuarioescuela__rol='estudiante'
+        ).distinct()
+
+class ProfesorEscuelasListView(generics.ListAPIView):
+    serializer_class = EscuelaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Obtener las escuelas donde el usuario autenticado es profesor
+        return Escuela.objects.filter(usuarioescuela__usuario=self.request.user, usuarioescuela__rol='profesor')
+
 # Vista para GET, POST, PUT, DELETE en /administrador/<usuarioEscuela>/informacion/
 class EscuelaDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = EscuelaSerializer
@@ -26,6 +59,12 @@ class EscuelaDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         nombre = self.kwargs['usuarioEscuela']
         return get_object_or_404(Escuela, nombre=nombre)
+
+# Crear escuelas directamente
+class EscuelaCreateView(generics.CreateAPIView):
+    queryset = Escuela.objects.all()
+    serializer_class = EscuelaSerializer
+
 
 # Vista de estudiantes de una escuela
 class AdminEstudiantesView(generics.ListCreateAPIView):

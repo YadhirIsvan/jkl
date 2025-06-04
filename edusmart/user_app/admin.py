@@ -3,6 +3,7 @@ from user_app.models import Account, UsuarioEscuela
 
 # Register your models here.
 admin.site.register(Account)
+admin.site.register(UsuarioEscuela)
 
 class UsuarioEscuelaAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'escuela', 'rol', 'fecha_asignacion')
