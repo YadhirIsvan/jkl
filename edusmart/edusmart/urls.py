@@ -9,6 +9,8 @@ urlpatterns = [
 
     # Escuelas
     path('administrador/', include('schools.api.urls')),
+    path('estudiante/', include('schools.api.urls')),
+
     # Grupos
     path('administrador/', include('groups.api.urls')),
     # Cursos

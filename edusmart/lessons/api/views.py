@@ -14,6 +14,25 @@ from courses.api.serializers import CursoSerializer
 from lessons.models import Leccion, GrupoLeccion
 from lessons.api.serializers import LeccionSerializer, GrupoLeccionSerializer
 
+# Inicio estudiantes
+
+class EstudianteLeccionesCursoView(generics.ListAPIView):
+    serializer_class = LeccionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        usuario = self.request.user
+        slug_curso = self.kwargs['nombreCurso']
+        username_escuela = self.kwargs['usuarioEscuela']
+
+        return Leccion.objects.filter(
+            curso__slug=slug_curso,
+            curso__escuela__username=username_escuela,
+            curso__cursousuario__usuario=usuario
+        ).order_by('orden')  # orden opcional si quieres mostrarlo por orden
+
+# fin estudiantes
+
 # Vista para /administrador/<usuarioEscuela>/cursos/<nombreCurso>/lecciones/
 class AdminLeccionListCreateView(generics.ListCreateAPIView):
     serializer_class = GrupoLeccionSerializer

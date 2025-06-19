@@ -1,22 +1,36 @@
 # Archivo: schools/api/views.py (ejemplo de una app con vistas genéricas DRF adaptadas)
 
+
 from rest_framework import generics, mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.shortcuts import get_object_or_404
-
 from schools.models import Escuela
 from schools.api.serializers import EscuelaSerializer
 from user_app.models import UsuarioEscuela
 from user_app.api.serializers import UsuarioEscuelaSerializer
 from courses.models import Curso
-from courses.api.serializers import CursoSerializer 
-
+from courses.api.serializers import CursoSerializer
 from groups.models import Grupo
 from groups.api.serializers import GrupoSerializer
 
+# INICIO ESTUDIANTES
 
+class EstudianteEscuelasView(generics.ListAPIView):
+    serializer_class = EscuelaSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        username = self.kwargs['usuarioEscuela'].lower()
+        return Escuela.objects.filter(
+            usuarioescuela__usuario__username=username,
+            usuarioescuela__rol='estudiante'
+        ).distinct()
+
+# fin estudiantes
+# INICIO PROFESOR/
+
+# fin profesor
 class EscuelasDelProfesorView(generics.ListAPIView):
     serializer_class = EscuelaSerializer
     permission_classes = [IsAuthenticated]
@@ -27,7 +41,7 @@ class EscuelasDelProfesorView(generics.ListAPIView):
             usuarioescuela__usuario=usuario,
             usuarioescuela__rol='profesor'
         ).distinct()
-    
+
 
 class EscuelasDelEstudianteView(generics.ListAPIView):
     serializer_class = EscuelaSerializer

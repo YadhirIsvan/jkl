@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.text import slugify
+
 
 class Curso(models.Model):
     nombre = models.CharField(max_length=255)
@@ -11,6 +13,16 @@ class Curso(models.Model):
     tipo_curso = models.CharField(max_length=100)
     codigo = models.CharField(max_length=50)
     escuela = models.ForeignKey('schools.Escuela', on_delete=models.CASCADE)
+
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nombre)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nombre
 
 class HorarioCurso(models.Model):
     DIAS = [

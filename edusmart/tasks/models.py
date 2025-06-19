@@ -1,4 +1,5 @@
 from django.db import models
+from courses.models import Curso  
 
 class Tarea(models.Model):
     TIPOS = [
@@ -13,6 +14,9 @@ class Tarea(models.Model):
     fecha_cierre = models.DateField()
     calificacion_maxima = models.DecimalField(max_digits=5, decimal_places=2)
     leccion = models.ForeignKey('lessons.Leccion', on_delete=models.CASCADE)
+    curso = models.ForeignKey('courses.Curso', on_delete=models.CASCADE, null=True, blank=True)
+
+
 
 class RecursoTarea(models.Model):
     TIPOS = [

@@ -16,6 +16,20 @@ from lessons.api.serializers import LeccionSerializer, GrupoLeccionSerializer
 from tasks.models import Tarea
 from tasks.api.serializers import TareaSerializer
 
+class EstudianteTareaListView(generics.ListAPIView):
+    serializer_class = TareaSerializer
+
+    def get_queryset(self):
+        usuario = self.request.user
+        usuario_escuela = self.kwargs['usuarioEscuela']
+        slug_curso = self.kwargs['nombreCurso']
+
+        return Tarea.objects.filter(
+            curso__slug=slug_curso,
+            curso__escuela__username=usuario_escuela,
+            curso__cursousuario__usuario=usuario
+        ).distinct()
+
 # Vista para /administrador/<usuarioEscuela>/cursos/<nombreCurso>/tareas/
 class AdminTareaListCreateView(generics.ListCreateAPIView):
     serializer_class = TareaSerializer
@@ -35,3 +49,4 @@ class AdminTareaDetailView(generics.RetrieveUpdateDestroyAPIView):
             leccion__grupo_leccion__curso__nombre=self.kwargs['nombreCurso'],
             leccion__grupo_leccion__curso__escuela__nombre=self.kwargs['usuarioEscuela']
         )
+

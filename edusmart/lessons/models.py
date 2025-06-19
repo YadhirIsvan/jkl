@@ -1,4 +1,5 @@
 from django.db import models
+from courses.models import Curso 
 
 class GrupoLeccion(models.Model):
     titulo = models.CharField(max_length=255)
@@ -12,7 +13,12 @@ class Leccion(models.Model):
     orden = models.IntegerField()
     recurso_url = models.CharField(max_length=500)
     fecha_disponible = models.DateField()
+    
     grupo_leccion = models.ForeignKey(GrupoLeccion, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)  # 🔥 Esta es la FK al curso
+
+    def __str__(self):
+        return self.titulo
 
 class LeccionUsuario(models.Model):
     ESTADOS = [

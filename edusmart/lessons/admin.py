@@ -9,9 +9,9 @@ class GrupoLeccionAdmin(admin.ModelAdmin):
 
 @admin.register(Leccion)
 class LeccionAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'orden', 'fecha_disponible', 'grupo_leccion')
-    list_filter = ('fecha_disponible', 'grupo_leccion')
-    search_fields = ('titulo', 'contenido')
+    list_display = ('titulo', 'orden', 'fecha_disponible', 'grupo_leccion', 'curso')
+    list_filter = ('fecha_disponible', 'grupo_leccion', 'curso')
+    search_fields = ('titulo', 'contenido', 'curso__nombre')
 
 @admin.register(LeccionUsuario)
 class LeccionUsuarioAdmin(admin.ModelAdmin):
